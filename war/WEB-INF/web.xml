@@ -4,10 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     version="2.5">
-  <display-name>Clojure Guestbook</display-name>
+  <display-name>Clojure Operations manager</display-name>
   <servlet>
     <servlet-name>gb</servlet-name>
-    <servlet-class>guestbook.servlet</servlet-class>
+    <servlet-class>easyopmanager.servlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>gb</servlet-name>

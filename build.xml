@@ -1,4 +1,4 @@
-<project name="guestbook-clj" basedir="." default="test">
+<project name="easyopmanger-clj" basedir="." default="test">
  
   <property environment="env" />
   <property name="sdk.dir" location="../appengine-java-sdk" />
@@ -40,17 +40,7 @@
     <java classname="clojure.lang.Compile" classpathref="project.classpath" failonerror="true">
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
-      <arg value="guestbook.servlet" />
-    </java>
-  </target>
-  
-  <target name="test" description="compile and test" depends="compile">
-    <java classname="clojure.main" classpathref="project.classpath" fork="true" failonerror="true" dir="${test.dir}">
-      <classpath path="${test.dir}" />
-      <arg value="-e" />
-      <arg value="(use 'clojure.contrib.test-is)
-(require 'guestbook.greetings-test)
-(run-tests 'guestbook.greetings-test)" />
+      <arg value="easyopmanager.servlet" />
     </java>
   </target>
   
