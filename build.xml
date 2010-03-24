@@ -1,0 +1,65 @@
+<project name="guestbook-clj" basedir="." default="test">
+ 
+  <property environment="env" />
+  <property name="sdk.dir" location="../appengine-java-sdk" />
+  <property name="classes.dir" value="war/WEB-INF/classes" />
+  <property name="lib.dir" value="war/WEB-INF/lib" />
+  <property name="src.dir" value="src" />
+  <property name="test.dir" value="test" />
+  <property name="mylibs.dir" value="/home/jennifer/libs" />
+  
+  <import file="${sdk.dir}/config/user/ant-macros.xml"/>
+  
+  <path id="project.classpath">
+    <pathelement path="${classes.dir}" />
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${sdk.dir}/lib">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+  
+  <target name="clean">
+    <delete dir="${classes.dir}" />
+  </target>
+  
+  <target name="init">
+    <mkdir dir="${classes.dir}" />
+  </target>
+  
+  <target name="copyjars">
+    <copy file="${sdk.dir}/lib/user/appengine-api-1.0-sdk-1.2.6.jar" todir="${lib.dir}" />
+    <copy todir="${lib.dir}">
+      <filelist dir="${mylibs.dir}/" 
+											files="clojure-1.1.0.jar clojure-contrib-1.1.0.jar appengine-clj.jar" />
+    </copy>
+  </target>
+  
+  <target name="compile" depends="clean,init,copyjars">
+    <java classname="clojure.lang.Compile" classpathref="project.classpath" failonerror="true">
+      <classpath path="${src.dir}" />
+      <sysproperty key="clojure.compile.path" value="${classes.dir}" />
+      <arg value="guestbook.servlet" />
+    </java>
+  </target>
+  
+  <target name="test" description="compile and test" depends="compile">
+    <java classname="clojure.main" classpathref="project.classpath" fork="true" failonerror="true" dir="${test.dir}">
+      <classpath path="${test.dir}" />
+      <arg value="-e" />
+      <arg value="(use 'clojure.contrib.test-is)
+(require 'guestbook.greetings-test)
+(run-tests 'guestbook.greetings-test)" />
+    </java>
+  </target>
+  
+  <target name="devserver" description="run local dev appserver" depends="compile">
+    <dev_appserver war="war" />
+  </target>
+  
+  <target name="deploy" description="deploy to appspot" depends="compile">
+    <appcfg action="update" war="war" />
+  </target>
+  
+</project>
